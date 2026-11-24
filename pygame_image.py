@@ -4,6 +4,12 @@ import pygame as pg
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+DELTA = {  # 押下キー: 移動量(横, 縦)
+    pg.K_UP:    (0, -1),
+    pg.K_DOWN:  (0, +1),
+    pg.K_LEFT:  (-1, 0),
+    pg.K_RIGHT: (+2, 0),
+}
 def main():
     pg.display.set_caption("はばたけ！こうかとん")
     screen = pg.display.set_mode((800, 600))
@@ -25,14 +31,12 @@ def main():
         screen.blit(bg_img,  [-x + 3200, 0])
 
         key_lst = pg.key.get_pressed()
-        if key_lst[pg.K_UP]:
-            kk_rct.move_ip((0, -1))
-        if key_lst[pg.K_DOWN]:
-            kk_rct.move_ip((0, +1))
-        if key_lst[pg.K_LEFT]:
-            kk_rct.move_ip((-1, 0))
-        if key_lst[pg.K_RIGHT]:
-            kk_rct.move_ip((+1, 0))
+        sum_mv = [-1, 0]
+        for key, mv in DELTA.items():
+            if key_lst[key]:
+                sum_mv[0] += mv[0]
+                sum_mv[1] += mv[1]
+        kk_rct.move_ip(sum_mv)
         screen.blit(kk_img, kk_rct)
 
         pg.display.update()
